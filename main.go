@@ -33,13 +33,7 @@ var rootCmd = &cobra.Command{
 	Short: "Orders API service",
 	Long: `Service that handles API requests for order CRUD operations
 on top of PostgreSQL database.`,
-}
-
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "Start a web server",
-	Long:  `Starts a webserver listening on "localhost:8080" by default.`,
-	Run:   serve,
+	Run: serve,
 }
 
 var migrateCmd = &cobra.Command{
@@ -80,7 +74,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.orders-api.yaml)")
 	rootCmd.AddCommand(migrateCmd)
-	rootCmd.AddCommand(serveCmd)
 
 	// Here you will define your flags and configuration settings.
 
