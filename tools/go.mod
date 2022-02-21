@@ -1,4 +1,4 @@
-module github.com/golang-templates/seed/build
+module github.com/arcapola/orders-api/build
 
 go 1.16
 
