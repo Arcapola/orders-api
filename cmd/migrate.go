@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -10,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// migrateCmd represents the migrate command
 var migrateCmd = &cobra.Command{
 	Use:   "migrate",
 	Short: "A brief description of your command",
