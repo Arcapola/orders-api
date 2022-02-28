@@ -22,6 +22,52 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/customer": {
+            "post": {
+                "description": "Add a customer by JSON and store it in-memory (TODO)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customers"
+                ],
+                "summary": "Add a customer",
+                "parameters": [
+                    {
+                        "description": "Add customer",
+                        "name": "order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/health/ping": {
             "get": {
                 "description": "run health-check ping request",
@@ -41,6 +87,158 @@ const docTemplate_swagger = `{
                         "schema": {
                             "type": "string"
                         }
+                    }
+                }
+            }
+        },
+        "/order": {
+            "post": {
+                "description": "Add an order by JSON and store it in-memory (TODO)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Add an order",
+                "parameters": [
+                    {
+                        "description": "Add order",
+                        "name": "order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddOrder"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Order"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "httputil.HTTPError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 400
+                },
+                "message": {
+                    "type": "string",
+                    "example": "status bad request"
+                }
+            }
+        },
+        "models.AddCustomer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "Street 1234, 01234 City, Country"
+                },
+                "name": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "A Company Ltd."
+                }
+            }
+        },
+        "models.AddOrder": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.MenuItem"
+                    }
+                }
+            }
+        },
+        "models.Customer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "Street 1234, 01234 City, Country"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "f3537d5c-cf15-48cc-b309-7a51312a574f"
+                },
+                "name": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "A Company Ltd."
+                }
+            }
+        },
+        "models.MenuItem": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "format": "uint",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "Food"
+                },
+                "unit_price": {
+                    "type": "number",
+                    "format": "float64",
+                    "example": 3.99
+                }
+            }
+        },
+        "models.Order": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "customer": {
+                    "$ref": "#/definitions/models.Customer"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "f3537d5c-cf15-48cc-b309-7a51312a574f"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.MenuItem"
                     }
                 }
             }

@@ -19,7 +19,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/arcapola/orders-api/controllers/customer"
 	"github.com/arcapola/orders-api/controllers/health"
+	"github.com/arcapola/orders-api/controllers/order"
 	"github.com/arcapola/orders-api/docs"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -108,6 +110,12 @@ func serve(cmd *cobra.Command, args []string) {
 			healthController := new(health.Controller)
 			healthv1.GET("/ping", healthController.Ping)
 		}
+
+		customerController := customer.NewController()
+		orderController := order.NewController()
+
+		v1.POST("/customer", customerController.AddCustomer)
+		v1.POST("/order", orderController.AddOrder)
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

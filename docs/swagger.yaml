@@ -1,4 +1,79 @@
 basePath: /api/v1
+definitions:
+  httputil.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  models.AddCustomer:
+    properties:
+      address:
+        example: Street 1234, 01234 City, Country
+        format: string
+        type: string
+      name:
+        example: A Company Ltd.
+        format: string
+        type: string
+    type: object
+  models.AddOrder:
+    properties:
+      customer_id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/models.MenuItem'
+        type: array
+    type: object
+  models.Customer:
+    properties:
+      address:
+        example: Street 1234, 01234 City, Country
+        format: string
+        type: string
+      id:
+        example: f3537d5c-cf15-48cc-b309-7a51312a574f
+        format: uuid
+        type: string
+      name:
+        example: A Company Ltd.
+        format: string
+        type: string
+    type: object
+  models.MenuItem:
+    properties:
+      count:
+        example: 1
+        format: uint
+        type: integer
+      name:
+        example: Food
+        format: string
+        type: string
+      unit_price:
+        example: 3.99
+        format: float64
+        type: number
+    type: object
+  models.Order:
+    properties:
+      created_at:
+        type: string
+      customer:
+        $ref: '#/definitions/models.Customer'
+      id:
+        example: f3537d5c-cf15-48cc-b309-7a51312a574f
+        format: uuid
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/models.MenuItem'
+        type: array
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -10,6 +85,36 @@ info:
   title: Orders API
   version: "1.0"
 paths:
+  /customer:
+    post:
+      consumes:
+      - application/json
+      description: Add a customer by JSON and store it in-memory (TODO)
+      parameters:
+      - description: Add customer
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddCustomer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Add a customer
+      tags:
+      - customers
   /health/ping:
     get:
       consumes:
@@ -25,4 +130,34 @@ paths:
       summary: ping function
       tags:
       - health
+  /order:
+    post:
+      consumes:
+      - application/json
+      description: Add an order by JSON and store it in-memory (TODO)
+      parameters:
+      - description: Add order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddOrder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Add an order
+      tags:
+      - orders
 swagger: "2.0"
